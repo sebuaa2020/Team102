@@ -18,7 +18,7 @@ void set_goal() {
 
 // void get_path_plan() {}
 
-void go_to_goal(int argc, char **argv) {
+int go_to_goal(int argc, char **argv) {
     ros::init(argc, argv, "goal");
    
     set_goal(argc, argv);
@@ -40,9 +40,10 @@ void go_to_goal(int argc, char **argv) {
     move_base_client.waitForResult();
     if (move_base_client.getState() == actionlib::SimpleClientGoalState::SUCCEEDED) {
         ROS_INFO("到达目标: ", goal);
+        return 0;
     } else {
         ROS_INFO("无法到达目标: ", goal);
         handle_exception(CANNOT_GO_TO_GOAL);
+        return -1;
     }
-    return 0;
 }
