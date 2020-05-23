@@ -2,7 +2,7 @@
 
 <arg name="model" default="$(find wpb_home_bringup)/urdf/wpb_home.urdf"/>
 <arg name="gui" default="false" />
-<arg name="rvizconfig" default="$(find wpb_home_tutorials)/rviz/follow.rviz" />
+<arg name="rvizconfig" default="$(find wpb_home_bringup)/rviz/follow.rviz" />
 
 <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
 <param name="use_gui" value="$(arg gui)"/>
@@ -13,8 +13,8 @@
 <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
 <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-<!-- Run wpb_home_follow node -->
-<node name="wpb_home_follow" pkg="wpb_home_tutorials" type="wpb_home_follow"  output="screen">
+<!-- Run rushbot_follow node -->
+<node name="rushbot_follow" pkg="rushbot_follow" type="rushbot_follow"  output="screen">
 <param name="start" type="bool" value="true"/> 
 </node>
 

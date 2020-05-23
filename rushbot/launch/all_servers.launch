@@ -6,7 +6,7 @@
 
 <node pkg="rushbot" type="rushbot_grab" name="rushbot_grab">
 	<param name="start" type="bool" value="false"/> 
-	<rosparam file="$(find rushbot)/config/wpb_home.yaml" command="load" />
+	<rosparam file="$(find wpb_home_bringup)/config/wpb_home.yaml" command="load" />
 </node>
 
 <node pkg="rushbot" type="rushbot_pass" name="rushbot_pass"/>

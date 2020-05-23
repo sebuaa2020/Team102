@@ -74,6 +74,7 @@
   <build_depend>message_generation</build_depend>
   <build_depend>xfyun_waterplus</build_depend>
   <build_depend>waterplus_map_tools</build_depend>
+  <build_depend>wpb_home_bringup</build_depend>
 
   <exec_depend>libpcl-all</exec_depend>
   <exec_depend>roscpp</exec_depend>
@@ -87,6 +88,8 @@
   <exec_depend>message_runtime</exec_depend>
   <exec_depend>xfyun_waterplus</exec_depend>
   <exec_depend>waterplus_map_tools</exec_depend>
+  <exec_depend>wpb_home_bringup</exec_depend>
+
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -185,23 +185,6 @@ target_link_libraries(rushbot_shopping
 )
 
 
-add_executable(rushbot_core
-  src/rushbot_core.cpp
-  src/driver/SerialCom.cpp
-  src/driver/WPB_Home_driver.cpp
-)
-add_dependencies(rushbot_core ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(rushbot_core
-  ${catkin_LIBRARIES}
-)
-
-add_executable(rushbot_lidar_filter
-  src/rushbot_lidar_filter.cpp
- )
-add_dependencies(rushbot_lidar_filter ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(rushbot_lidar_filter
-  ${catkin_LIBRARIES}
-)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
