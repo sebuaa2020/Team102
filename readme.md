@@ -26,15 +26,18 @@
    [安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
 
 2. 拉取仓库
-为了开发方便，直接将整个src上传了，开发结束后再进行整理。
-备份原有 `catkin_ws` 下 `src` 目录
-进入该目录后，清空该目录下所有内容（如有必要）
 
-``` sh
-git init
-git remote add origin https://github.com/sebuaa2020/Team102.git
-git pull origin master
-```
+  为了开发方便，直接将整个src上传了，开发结束后再进行整理。
+
+  备份原有 `catkin_ws` 下 `src` 目录（如有必要）
+
+  进入该目录后，清空该目录下所有内容
+
+  ``` sh
+  git init
+  git remote add origin https://github.com/sebuaa2020/Team102.git
+  git pull origin master
+  ```
 
 
 3. 编译
