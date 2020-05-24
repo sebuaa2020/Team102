@@ -23,8 +23,6 @@
    sudo apt-get install ros-kinetic-sound-play
    ```
 
-   [安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
-
 2. 拉取仓库
 
   为了开发方便，直接将整个src上传了，开发结束后再进行整理。
@@ -38,6 +36,8 @@
   git remote add origin https://github.com/sebuaa2020/Team102.git
   git pull origin master
   ```
+
+  不知道什么原因，iai-kinect2 包传不上来，可能需要[安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
 
 
 3. 编译
