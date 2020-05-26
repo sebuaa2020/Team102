@@ -184,6 +184,13 @@ target_link_libraries(rushbot_shopping
   ${catkin_LIBRARIES}
 )
 
+add_executable(rushbot_keyboard_ctrl
+  src/rushbot_keyboard_ctrl.cpp
+)
+add_dependencies(rushbot_keyboard_ctrl ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rushbot_keyboard_ctrl
+  ${catkin_LIBRARIES}
+)
 
 
 ## Rename C++ executable without prefix
