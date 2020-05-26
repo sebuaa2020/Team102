@@ -23,7 +23,7 @@
   </node>
 
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find wpb_home_tutorials)/maps/map.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rushbot)/data/map.yaml"/>
 
   <!--- Run AMCL -->
   <include file="$(find wpb_home_tutorials)/nav_lidar/amcl_omni.launch" />
@@ -54,7 +54,7 @@
 
   <!-- Map tools  -->
   <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager" output="screen">
-    <param name="load" type="string" value="/home/robot/waypoints.xml"/> 
+    <param name="load" type="string" value="$(find rushbot)/data/waypoints.xml"/> 
   </node>
 
 </launch>

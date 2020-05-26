@@ -1,7 +1,7 @@
 <launch>
 
   <!-- Map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find wpb_home_tutorials)/maps/map.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rushbot)/data/map.yaml"/>
   
   <!-- RViz and TF  -->
   <arg name="rvizconfig" default="$(find waterplus_map_tools)/rviz/editwaypoints.rviz" />

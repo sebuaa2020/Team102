@@ -1,0 +1,26 @@
+<launch>
+
+  <arg name="model" default="$(find wpb_home_bringup)/urdf/wpb_home.urdf"/>
+  <arg name="gui" default="false" />
+  <arg name="rvizconfig" default="$(find waterplus_map_tools)/rviz/nav.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" >
+    <rosparam command="load" file="$(find wpr_simulation)/config/wpb_home.yaml" />
+  </node>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+<!-- ##################################################################################### -->
+
+  <!-- Run the map server -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find rushbot)/data/map.yaml"/>
+
+  <!-- Map tools  -->
+  <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager" output="screen">
+    <param name="load" type="string" value="$(find rushbot)/data/waypoints.xml"/> 
+  </node>
+
+</launch>
