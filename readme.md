@@ -32,8 +32,8 @@
   git init
 git remote add origin https://github.com/sebuaa2020/Team102.git
   git pull origin master
-  ```
-  
+```
+
   不知道什么原因，iai-kinect2 包传不上来，可能需要[安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
 
 
@@ -107,5 +107,15 @@ git remote add origin https://github.com/sebuaa2020/Team102.git
    （详情见开发手册 37 页）
 4. `rosrun rushbot rushbot_nav_goal`
    启动测试节点并输入 **以地图为坐标系** 的终点目标
-5. 机器人规并移动
+5. 机器人规划并移动
 
+##### 方法3：路点巡航测试
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+   Gazebo 运行环境
+2. `roslaunch rushbot nav_test.launch`
+   开启 AMCL 和 move_base，完成导航相关节点加载
+3. 若 Gazebo 和 Rviz 中机器人位置不一致，需要对机器人初始位置微调
+   （详情见开发手册 37 页）
+4. `rosrun waterplus_map_tools wp_nav_test`
+5. 机器人巡航移动
