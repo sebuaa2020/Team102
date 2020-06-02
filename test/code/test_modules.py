@@ -1,3 +1,5 @@
+"""模块测试以及完整流程测试 
+"""
 import argparse
 import json
 import logging
@@ -53,7 +55,7 @@ def navigation():  # GUI test navigation
     pprint(completed_processes)
 
 
-def voice_recognition():  # manual test
+def voice_recognition():  # manual test for now
     pass
 
 
@@ -63,7 +65,7 @@ def test_modules():
         "gmapping",
         "add_waypoint",
         "navigation",
-        "voice_recognition",
+        # "voice_recognition",
     ]
     while True:
         print("------------------------------")
