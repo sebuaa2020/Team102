@@ -18,6 +18,11 @@
   <!-- Run the map server -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(find rushbot)/data/map.yaml"/>
 
+  <!-- Map tools  -->
+  <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager" output="screen">
+    <param name="load" type="string" value="$(find rushbot)/data/waypoints.xml"/> 
+  </node>
+
   <!--- Run AMCL -->
   <include file="$(find wpb_home_bringup)/nav_lidar/amcl_omni.launch" />
 

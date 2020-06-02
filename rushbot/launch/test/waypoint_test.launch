@@ -2,7 +2,7 @@
 
   <arg name="model" default="$(find wpb_home_bringup)/urdf/wpb_home.urdf"/>
   <arg name="gui" default="false" />
-  <arg name="rvizconfig" default="$(find waterplus_map_tools)/rviz/nav.rviz" />
+  <arg name="rvizconfig" default="$(find rushbot)/rviz/nav.rviz" />
 
   <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
   <param name="use_gui" value="$(arg gui)"/>
