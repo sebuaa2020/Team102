@@ -106,6 +106,6 @@ git remote add origin https://github.com/sebuaa2020/Team102.git
 3. 若 Gazebo 和 Rviz 中机器人位置不一致，需要对机器人初始位置微调
    （详情见开发手册 37 页）
 4. `rosrun rushbot rushbot_nav_goal`
-   启动测试节点并输入 **以机器人为坐标系** 的终点目标
+   启动测试节点并输入 **以地图为坐标系** 的终点目标
 5. 机器人规并移动
 

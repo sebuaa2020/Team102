@@ -15,11 +15,11 @@ int main(int argc, char** argv){
 
 	move_base_msgs::MoveBaseGoal goal;
 
-	goal.target_pose.header.frame_id = "base_footprint";
+	goal.target_pose.header.frame_id = "map";
 	goal.target_pose.header.stamp = ros::Time::now();
 
 	double x, y;
-	ROS_INFO("Please input x y as destination. (x, y) in base_footprint");
+	ROS_INFO("Please input x y as destination. (x, y) in map frame");
 	ROS_INFO("FORMAT: x y");
 	scanf("%lf%lf", &x, &y) != 2;
 	goal.target_pose.pose.position.x = x;
@@ -31,7 +31,7 @@ int main(int argc, char** argv){
 	ac.waitForResult();
 
 	if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-		ROS_INFO("Hooray, the base moved 1 meter forward");
+		ROS_INFO("Hooray, move successfully");
 	else
-		ROS_INFO("The base failed to move forward 1 meter for some reason"); return 0;
+		ROS_INFO("The base failed to move for some reason"); return 0;
 }
