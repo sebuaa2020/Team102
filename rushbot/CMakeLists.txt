@@ -192,6 +192,12 @@ target_link_libraries(rushbot_keyboard_ctrl
   ${catkin_LIBRARIES}
 )
 
+add_executable(rushbot_nav_goal src/test/rushbot_nav_goal.cpp)
+add_dependencies(rushbot_nav_goal ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rushbot_nav_goal
+  ${catkin_LIBRARIES}
+)
+
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
