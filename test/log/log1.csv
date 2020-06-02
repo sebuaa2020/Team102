@@ -1,0 +1,13 @@
+,测试样例,关键词,输出结果
+1,please start your show,start,success
+2,what a pity,start,fail
+3,start now stop,start,success
+4,stop now start,start,fail
+5,please stop now,stop,success
+6,stop by now,stop,success
+7,what a pity,stop,fail
+8,please stop ,stop,success
+9,follow me now,follow,success
+10,now follow me,follow,success
+11,now me follow,follow,success
+12,what a pity,follow,fail
