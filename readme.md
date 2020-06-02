@@ -84,7 +84,9 @@ git remote add origin https://github.com/sebuaa2020/Team102.git
 
    重新加载已保存航点查看结果
 
-##### Navigation 测试方法
+##### Navigation 测试
+
+##### 方法1：图形化界面测试
 
 1. `roslaunch wpr_simulation wpb_simple.launch`
    Gazebo 运行环境
@@ -94,4 +96,16 @@ git remote add origin https://github.com/sebuaa2020/Team102.git
    （详情见开发手册 37 页）
 4. 点击 Rviz `2D Nav Goal` 工具设定导航目标点
 5. 机器人规划出紫色路径并移动
+
+##### 方法2：输入目标点测试
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+   Gazebo 运行环境
+2. `roslaunch rushbot nav_test.launch`
+   开启 AMCL 和 move_base，完成导航相关节点加载
+3. 若 Gazebo 和 Rviz 中机器人位置不一致，需要对机器人初始位置微调
+   （详情见开发手册 37 页）
+4. `rosrun rushbot rushbot_nav_goal`
+   启动测试节点并输入 **以机器人为坐标系** 的终点目标
+5. 机器人规并移动
 
