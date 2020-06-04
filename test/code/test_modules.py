@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """模块测试以及完整流程测试 
 """
 import argparse
