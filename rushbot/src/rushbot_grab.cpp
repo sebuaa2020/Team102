@@ -81,13 +81,8 @@ static float grab_gripper_value = 0.032;    //抓取物品时，手爪闭合后�
 #define STEP_FIND_PLANE     1
 #define STEP_PLANE_DIST     2
 #define STEP_FIND_OBJ       3
-#define STEP_OBJ_DIST       4
-#define STEP_HAND_UP        5
-#define STEP_FORWARD        6
-#define STEP_GRAB           7
-#define STEP_OBJ_UP         8
-#define STEP_BACKWARD       9
-#define STEP_DONE           10
+#define STEP_GRAB           4
+#define STEP_DONE           5
 static int nStep = STEP_WAIT;
 
 static std::string pc_topic;
@@ -562,7 +557,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
                 fMoveTargetX = 0.0f;
                 fMoveTargetY = fObjGrabY - fTargetGrabY + grab_y_offset;
                 //ROS_WARN("[MOVE_TARGET] x = %.2f y= %.2f " ,fMoveTargetX, fMoveTargetY);
-                nStep = STEP_OBJ_DIST;
+                nStep = STEP_GRAB;
             }
         }
 
@@ -570,75 +565,16 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
         result_pub.publish(result_msg);
     }
 
-    //5、抬起手臂
-    if(nStep == STEP_HAND_UP)
-    {
-        if(nTimeDelayCounter == 0)
-        {
-            mani_ctrl_msg.position[0] = fPlaneHeight + grab_lift_offset;
-            mani_ctrl_msg.position[1] = 0.16;
-            mani_ctrl_pub.publish(mani_ctrl_msg);
-            ROS_WARN("[MANI_CTRL] lift= %.2f  gripper= %.2f " ,mani_ctrl_msg.position[0], mani_ctrl_msg.position[1]);
-            result_msg.data = "hand up";
-            result_pub.publish(result_msg);
-        }
-        nTimeDelayCounter ++;
-        VelCmd(0,0,0);
-        if(nTimeDelayCounter > 50)
-        {
-            fMoveTargetX = fObjGrabX -0.55 + grab_forward_offset;
-            fMoveTargetY = 0;
-            ROS_WARN("[STEP_FORWARD] x = %.2f y= %.2f " ,fMoveTargetX, fMoveTargetY);
-            nTimeDelayCounter = 0;
-            nStep = STEP_FORWARD;
-        }
-    }
-   
-    //7、抓取物品
+    //4、抓取物品
     if(nStep == STEP_GRAB)
     {
-        if(nTimeDelayCounter == 0)
-        {
-            result_msg.data = "grab";
-            result_pub.publish(result_msg);
-        }
-        mani_ctrl_msg.position[1] = grab_gripper_value;      //抓取物品手爪闭合宽度
-        mani_ctrl_pub.publish(mani_ctrl_msg);
-        //ROS_WARN("[MANI_CTRL] lift= %.2f  gripper= %.2f " ,mani_ctrl_msg.position[0], mani_ctrl_msg.position[1]);
-
-        nTimeDelayCounter++;
-        VelCmd(0,0,0);
-        if(nTimeDelayCounter > 30)
-        {
-            nTimeDelayCounter = 0;
-            nStep = STEP_OBJ_UP;
-        }
+		ROS_INFO("grab start");
+		ros::Duration(10).sleep();
+		ROS_INFO("grab finish");
+		nStep = STEP_DONE;
     }
-    //8、拿起物品
-    if(nStep == STEP_OBJ_UP)
-    {
-        if(nTimeDelayCounter == 0)
-        {
-            mani_ctrl_msg.position[0] += 0.03;
-            mani_ctrl_pub.publish(mani_ctrl_msg);
-            //ROS_WARN("[MANI_CTRL] lift= %.2f  gripper= %.2f " ,mani_ctrl_msg.position[0], mani_ctrl_msg.position[1]);
-            result_msg.data = "object up";
-            result_pub.publish(result_msg);
-        }
-        nTimeDelayCounter++;
-        VelCmd(0,0,0);
-        if(nTimeDelayCounter > 10)
-        {
-            fMoveTargetX = -(fTargetGrabX-0.4);
-            fMoveTargetY = 0;
-            //ROS_WARN("[STEP_BACKWARD] x= %.2f y= %.2f " ,fMoveTargetX, fMoveTargetY);
 
-            nTimeDelayCounter = 0;
-            nStep = STEP_BACKWARD;
-        }
-    }
-    
-    //10、抓取任务完毕
+    //5、抓取任务完毕
     if(nStep == STEP_DONE)
     {
         result_msg.data = "done";
@@ -863,76 +799,6 @@ int main(int argc, char **argv)
             result_pub.publish(result_msg);
         }
     
-        //4、左右平移对准目标物品 
-        if(nStep == STEP_OBJ_DIST)
-        {
-            float vx,vy;
-            vx = (fMoveTargetX - pose_diff.x)/2;
-            vy = (fMoveTargetY - pose_diff.y)/2;
-
-            VelCmd(vx,vy,0);
-            //ROS_INFO("[MOVE] T(%.2f %.2f)  od(%.2f , %.2f) v(%.2f,%.2f)" ,fMoveTargetX, fMoveTargetY, pose_diff.x ,pose_diff.y,vx,vy);
-
-            if(fabs(vx) < 0.01 && fabs(vy) < 0.01)
-            {
-                VelCmd(0,0,0);
-                ctrl_msg.data = "pose_diff reset";
-                ctrl_pub.publish(ctrl_msg);
-                nStep = STEP_HAND_UP;
-            }
-
-            result_msg.data = "object x";
-            result_pub.publish(result_msg);
-        }
-
-         //6、前进靠近物品
-        if(nStep == STEP_FORWARD)
-        {
-            float vx,vy;
-            vx = (fMoveTargetX - pose_diff.x)/2;
-            vy = (fMoveTargetY - pose_diff.y)/2;
-
-            VelCmd(vx,vy,0);
-
-            //ROS_INFO("[MOVE] T(%.2f %.2f)  od(%.2f , %.2f) v(%.2f,%.2f)" ,fMoveTargetX, fMoveTargetY, pose_diff.x ,pose_diff.y,vx,vy);
-
-            if(fabs(vx) < 0.01 && fabs(vy) < 0.01)
-            {
-                VelCmd(0,0,0);
-                ctrl_msg.data = "pose_diff reset";
-                ctrl_pub.publish(ctrl_msg);
-                nStep = STEP_GRAB;
-            }
-
-            result_msg.data = "forward";
-            result_pub.publish(result_msg);
-        }
-
-        //9、带着物品后退
-        if(nStep == STEP_BACKWARD)
-        {
-            //ROS_WARN("[STEP_BACKWARD] nTimeDelayCounter = %d " ,nTimeDelayCounter);
-            //nTimeDelayCounter++;
-            
-            float vx,vy;
-            vx = (fMoveTargetX - pose_diff.x)/2;
-            vy = (fMoveTargetY - pose_diff.y)/2;
-
-            VelCmd(vx,vy,0);
-
-            //ROS_INFO("[MOVE] T(%.2f %.2f)  od(%.2f , %.2f) v(%.2f,%.2f)" ,fMoveTargetX, fMoveTargetY, pose_diff.x ,pose_diff.y,vx,vy);
-
-            if(fabs(vx) < 0.01 && fabs(vy) < 0.01)
-            {
-                VelCmd(0,0,0);
-                ctrl_msg.data = "pose_diff reset";
-                ctrl_pub.publish(ctrl_msg);
-                nStep = STEP_DONE;
-            }
-
-            result_msg.data = "backward";
-            result_pub.publish(result_msg);
-        }
 
         ros::spinOnce();
         r.sleep();
