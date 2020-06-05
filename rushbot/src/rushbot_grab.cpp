@@ -160,7 +160,7 @@ static int nTimeOut = 0;
 
 void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
 {
-    //ROS_WARN("ProcCloudCB");
+    ROS_WARN("ProcCloudCB");
 
     //to footprint
     sensor_msgs::PointCloud2 pc_footprint;
@@ -198,7 +198,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
     if( nStep == STEP_FIND_PLANE || nStep == STEP_FIND_OBJ)
     {
         // Process
-        //ROS_INFO("Cloud: width = %d, height = %d\n", input.width, input.height);
+        // ROS_INFO("Cloud: width = %d, height = %d\n", input.width, input.height);
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr plane(new pcl::PointCloud<pcl::PointXYZRGB>);
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr convexHull(new pcl::PointCloud<pcl::PointXYZRGB>);
 
@@ -221,6 +221,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
         RemoveBoxes();
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f (new pcl::PointCloud<pcl::PointXYZRGB>);
         int i = 0, nr_points = (int) cloud_source_ptr->points.size ();
+		//ROS_INFO("cloud source number: %d\n", nr_points);
         // While 30% of the original cloud is still there
         while (cloud_source_ptr->points.size () > 0.03 * nr_points)
         {
@@ -244,7 +245,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
                 plane_height += plane->points[k].z;
             }
             plane_height /= plane->width * plane->height;
-            //ROS_WARN("%d - plane: %d points. height =%.2f" ,i, plane->width * plane->height,plane_height);
+            // ROS_WARN("%d - plane: %d points. height =%.2f" ,i, plane->width * plane->height,plane_height);
             fPlaneHeight = plane_height;
            
             bool bFirstPoint = true;
@@ -268,6 +269,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
             } 
             //////////////////////////////////
             //测试：将平面用框框框起来
+			ROS_INFO("Drawbox to plane.");
             DrawBox(boxPlane.xMin, boxPlane.xMax, boxPlane.yMin, boxPlane.yMax, boxPlane.zMin, boxPlane.zMax, 1, 0, 1);
             //ROS_WARN("[FIND_PLANE] x= (%.2f , %.2f) y=(%.2f , %.2f) z=(%.2f , %.2f)" ,boxPlane.xMin,boxPlane.xMax,boxPlane.yMin,boxPlane.yMax,boxPlane.zMin,boxPlane.zMax);
             ///////////////////////////////////
@@ -370,6 +372,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
                         }
                         if(boxMarker.xMin < 1.5 && boxMarker.yMin > -0.5 && boxMarker.yMax < 0.5)   //物品所处的空间限定
                         {
+							ROS_INFO("Drawbox to things.");
                             DrawBox(boxMarker.xMin, boxMarker.xMax, boxMarker.yMin, boxMarker.yMax, boxMarker.zMin, boxMarker.zMax, 0, 1, 0);
 
                             std::ostringstream stringStream;
@@ -456,6 +459,8 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
         }
     }
 
+	ROS_INFO("current state: %d\n", nStep);
+
     /*二、有限状态机 *************************************************************************************************/
     //1、统计识别次数，确认平面
     if(nStep == STEP_FIND_PLANE)  //(点云处理算法在上面)
@@ -521,6 +526,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
             }
             else
             {
+				ROS_INFO("backing");
                 //距离还太近，后退
                 VelCmd(-0.1,0,0);
             }
@@ -827,6 +833,9 @@ int main(int argc, char **argv)
         VelCmd(0,0,0);
         nStep = STEP_FIND_PLANE;
     }
+
+	// DEBUG
+	nStep = STEP_FIND_PLANE;
 
     ros::Rate r(30);
     while(nh.ok())

@@ -1,14 +1,17 @@
 <launch>
 
-<node name="rushbot_follow" pkg="rushbot" type="rushbot_follow">
-	<param name="start" type="bool" value="false"/> 
-</node>
-
-<node pkg="rushbot" type="rushbot_grab" name="rushbot_grab">
+<node pkg="rushbot" type="rushbot_grab" name="rushbot_grab" output="screen">
 	<param name="start" type="bool" value="false"/> 
 	<rosparam file="$(find wpb_home_bringup)/config/wpb_home.yaml" command="load" />
 </node>
 
+<!--
+<node name="rushbot_follow" pkg="rushbot" type="rushbot_follow">
+	<param name="start" type="bool" value="false"/> 
+</node>
+
+
 <node pkg="rushbot" type="rushbot_pass" name="rushbot_pass"/>
+-->
 
 </launch>
