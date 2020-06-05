@@ -51,7 +51,7 @@
 ##### 可靠性测试与模块测试
 ```sh
 python test/code/test_modules.py
-``` 
+```
 
 ##### Gmapping 测试方法
 
@@ -121,3 +121,19 @@ python test/code/test_modules.py
    （详情见开发手册 37 页）
 4. `rosrun waterplus_map_tools wp_nav_test`
 5. 机器人巡航移动
+
+##### Detection 测试
+
+前置依赖：项目仓库下 models 目录下所有文件夹应放置于本机 `~/.gazebo/models` 目录下
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+   Gazebo 运行环境
+2. `roslaunch rushbot obj_detect.launch`
+   开启 Rviz 并进行相关配置
+   这里没有开启 AMCL 和 move_base，不能进行导航
+3. 在 Gazebo 机器人前方 **2米** 以内摆放一张 **cafe_table**，在上方放置一个 **coke_can**，并将 coke_can Property 中 pose 的 y 值调整为桌面高度：0.77
+4. 将 Rviz 边栏中 Kinect 订阅主题改为 `/kinect2/sd/points`
+   改动之后，Rviz 中机器人面前应有图像出现
+5. `roslaunch rushbot all_servers.launch`
+   启动检测抓取节点
+6. 机器人寻找平面后靠近平面检测物体
