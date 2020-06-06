@@ -155,7 +155,7 @@ static int nTimeOut = 0;
 
 void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
 {
-    ROS_WARN("ProcCloudCB");
+    //ROS_WARN("ProcCloudCB");
 
     //to footprint
     sensor_msgs::PointCloud2 pc_footprint;
@@ -454,8 +454,6 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
         }
     }
 
-	ROS_INFO("current state: %d\n", nStep);
-
     /*二、有限状态机 *************************************************************************************************/
     //1、统计识别次数，确认平面
     if(nStep == STEP_FIND_PLANE)  //(点云处理算法在上面)
@@ -703,23 +701,6 @@ void BehaviorCB(const std_msgs::String::ConstPtr &msg)
         nStep = STEP_FIND_PLANE;
         ROS_WARN("[grab_start] ");
     }
-
-    nFindIndex = msg->data.find("grab stop");
-    if( nFindIndex >= 0 )
-    {
-        ROS_WARN("[grab_stop] ");
-        nTimeOut = 0;
-        nStep = STEP_WAIT;
-        geometry_msgs::Twist vel_cmd;
-        vel_cmd.linear.x = 0;
-        vel_cmd.linear.y = 0;
-        vel_cmd.linear.z = 0;
-        vel_cmd.angular.x = 0;
-        vel_cmd.angular.y = 0;
-        vel_cmd.angular.z = 0;
-        vel_pub.publish(vel_cmd);
-    }
-
 }
 
 int main(int argc, char **argv)
@@ -730,6 +711,8 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh_param("~");
     nh_param.param<std::string>("topic", pc_topic, "/kinect2/sd/points");
+
+	ros::Duration(10).sleep();
 
     ros::NodeHandle nh;
     ros::Subscriber pc_sub = nh.subscribe(pc_topic, 10 , ProcCloudCB);
@@ -769,9 +752,6 @@ int main(int argc, char **argv)
         VelCmd(0,0,0);
         nStep = STEP_FIND_PLANE;
     }
-
-	// DEBUG
-	nStep = STEP_FIND_PLANE;
 
     ros::Rate r(30);
     while(nh.ok())

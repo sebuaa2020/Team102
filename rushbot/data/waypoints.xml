@@ -1,32 +1,22 @@
 <Waterplus>
     <Waypoint>
-        <Name>WayPoint1</Name>
-        <Pos_x>-0.135981</Pos_x>
-        <Pos_y>4.63524</Pos_y>
+        <Name>Start</Name>
+        <Pos_x>-0.0197797</Pos_x>
+        <Pos_y>-0.0370846</Pos_y>
         <Pos_z>0</Pos_z>
         <Ori_x>0</Ori_x>
         <Ori_y>0</Ori_y>
-        <Ori_z>-0.00407066</Ori_z>
-        <Ori_w>0.999992</Ori_w>
+        <Ori_z>0.00759765</Ori_z>
+        <Ori_w>0.999971</Ori_w>
     </Waypoint>
     <Waypoint>
-        <Name>WayPoint2</Name>
-        <Pos_x>4.41641</Pos_x>
-        <Pos_y>-0.463727</Pos_y>
+        <Name>Desk</Name>
+        <Pos_x>-5.80277</Pos_x>
+        <Pos_y>9.01142</Pos_y>
         <Pos_z>0</Pos_z>
         <Ori_x>0</Ori_x>
         <Ori_y>0</Ori_y>
-        <Ori_z>-0.705562</Ori_z>
-        <Ori_w>0.708648</Ori_w>
-    </Waypoint>
-    <Waypoint>
-        <Name>WayPoint3</Name>
-        <Pos_x>0.120744</Pos_x>
-        <Pos_y>-1.62383</Pos_y>
-        <Pos_z>0</Pos_z>
-        <Ori_x>0</Ori_x>
-        <Ori_y>0</Ori_y>
-        <Ori_z>0.694933</Ori_z>
-        <Ori_w>0.719075</Ori_w>
+        <Ori_z>0.999995</Ori_z>
+        <Ori_w>-0.00301278</Ori_w>
     </Waypoint>
 </Waterplus>

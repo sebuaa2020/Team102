@@ -176,11 +176,11 @@ target_link_libraries(rushbot_pass
   ${catkin_LIBRARIES}
 )
 
-add_executable(rushbot_shopping
-  src/rushbot_shopping.cpp
+add_executable(rushbot_main
+  src/rushbot_main.cpp
 )
-add_dependencies(rushbot_shopping ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(rushbot_shopping
+add_dependencies(rushbot_main ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(rushbot_main
   ${catkin_LIBRARIES}
 )
 
