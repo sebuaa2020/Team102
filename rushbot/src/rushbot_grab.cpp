@@ -264,7 +264,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
             } 
             //////////////////////////////////
             //测试：将平面用框框框起来
-			ROS_INFO("Drawbox to plane.");
+			//ROS_INFO("Drawbox to plane.");
             DrawBox(boxPlane.xMin, boxPlane.xMax, boxPlane.yMin, boxPlane.yMax, boxPlane.zMin, boxPlane.zMax, 1, 0, 1);
             //ROS_WARN("[FIND_PLANE] x= (%.2f , %.2f) y=(%.2f , %.2f) z=(%.2f , %.2f)" ,boxPlane.xMin,boxPlane.xMax,boxPlane.yMin,boxPlane.yMax,boxPlane.zMin,boxPlane.zMax);
             ///////////////////////////////////
@@ -367,7 +367,7 @@ void ProcCloudCB(const sensor_msgs::PointCloud2 &input)
                         }
                         if(boxMarker.xMin < 1.5 && boxMarker.yMin > -0.5 && boxMarker.yMax < 0.5)   //物品所处的空间限定
                         {
-							ROS_INFO("Drawbox to things.");
+							//ROS_INFO("Drawbox to things.");
                             DrawBox(boxMarker.xMin, boxMarker.xMax, boxMarker.yMin, boxMarker.yMax, boxMarker.zMin, boxMarker.zMax, 0, 1, 0);
 
                             std::ostringstream stringStream;

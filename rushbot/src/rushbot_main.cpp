@@ -33,37 +33,6 @@ static bool bGrabDone;
 static int nState = STATE_WAITING;
 static int nDelay = 0;
 
-static vector<string> arKeyword;
-
-// 将机器人当前位置保存为新航点
-void AddNewWaypoint(string inStr)
-{
-	tf::TransformListener listener;
-	tf::StampedTransform transform;
-	try
-	{
-		listener.waitForTransform("/map","/base_footprint",  ros::Time(0), ros::Duration(10.0) );
-		listener.lookupTransform("/map","/base_footprint", ros::Time(0), transform);
-	}
-	catch (tf::TransformException &ex) 
-	{
-		ROS_ERROR("[lookupTransform] %s",ex.what());
-		return;
-	}
-
-	float tx = transform.getOrigin().x();
-	float ty = transform.getOrigin().y();
-	tf::Stamped<tf::Pose> p = tf::Stamped<tf::Pose>(tf::Pose(transform.getRotation() , tf::Point(tx, ty, 0.0)), ros::Time::now(), "map");
-	geometry_msgs::PoseStamped new_pos;
-	tf::poseStampedTFToMsg(p, new_pos);
-
-	waterplus_map_tools::Waypoint new_waypoint;
-	new_waypoint.name = inStr;
-	new_waypoint.pose = new_pos.pose;
-	add_waypoint_pub.publish(new_waypoint);
-
-	ROS_WARN("[New Waypoint] %s ( %.2f , %.2f )" , new_waypoint.name.c_str(), tx, ty);
-}
 
 // 物品抓取模式开关
 static void GrabSwitch(bool inActive)
@@ -85,16 +54,6 @@ void GrabResultCallback(const std_msgs::String::ConstPtr& res)
 	if( nFindIndex >= 0 )
 	{
 		bGrabDone = true;
-	}
-}
-
-// 物品递给状态
-void PassResultCallback(const std_msgs::String::ConstPtr& res)
-{
-	int nFindIndex = 0;
-	nFindIndex = res->data.find("done");
-	if( nFindIndex >= 0 )
-	{
 	}
 }
 
@@ -133,7 +92,7 @@ int main(int argc, char** argv)
 				std::string name = srvName.response.name;
 				float x = srvName.response.pose.position.x;
 				float y = srvName.response.pose.position.y;
-				ROS_INFO("[STATE_GOTO] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
+				ROS_INFO("[STATE_NAV_TO] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
 
 				MoveBaseClient ac("move_base", true);
 				if(!ac.waitForServer(ros::Duration(5.0)))
@@ -195,7 +154,7 @@ int main(int argc, char** argv)
 				std::string name = srvName.response.name;
 				float x = srvName.response.pose.position.x;
 				float y = srvName.response.pose.position.y;
-				ROS_INFO("[STATE_COMEBACK] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
+				ROS_INFO("[STATE_NAV_BACK] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
 
 				MoveBaseClient ac("move_base", true);
 				if(!ac.waitForServer(ros::Duration(5.0)))
