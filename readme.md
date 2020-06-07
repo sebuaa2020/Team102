@@ -137,3 +137,11 @@ python test/code/test_modules.py
 5. `roslaunch rushbot all_servers.launch`
    启动检测抓取节点
 6. 机器人寻找平面后靠近平面检测物体
+
+### 运行说明
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+   Gazebo 运行环境
+2. `roslaunch rushbot rushbot_main.launch`
+   开启 Rviz 并进行相关配置
+   开启功能节点
