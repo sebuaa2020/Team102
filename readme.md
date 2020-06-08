@@ -65,7 +65,7 @@ python test/code/test_modules.py
 
 2. `roslaunch xfyun_waterplus my_voice_cmd_test.launch`
 
-   开始测试语音控制机器人运动测试
+   开始语音控制机器人运动测试
 
 3. 给机器人发出类似“前”、“后”、“左”、“右”、“停止”的语音指令，观察机器人的运动情况
 
