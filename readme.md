@@ -29,9 +29,11 @@ Valid Until: 2020-09-30 23:59
    为了开发方便，直接将整个src上传了，开发结束后再进行整理。
    备份原有 `catkin_ws` 下 `src` 目录（如有必要）
    进入该目录后，清空该目录下所有内容
+
    ``` sh
    git clone https://github.com/sebuaa2020/Team102.git
    ```
+
    不知道什么原因，iai-kinect2 包传不上来，可能需要[安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
 
 
@@ -47,12 +49,25 @@ Valid Until: 2020-09-30 23:59
 
 ### 测试说明
 
-​	测试代码位于 `test/code`, `rushbot/launch/test` 和 `rushbot/src` 目录下。
+	测试代码位于 `test/code`, `rushbot/launch/test` 和 `rushbot/src` 目录下。
 
 ##### 可靠性测试与模块测试
+
 ```sh
 python test/code/test_modules.py
 ```
+
+##### 语音控制测试方法
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+
+   Gazebo运行环境
+
+2. `roslaunch xfyun_waterplus my_voice_cmd_test.launch`
+
+   开始测试语音控制机器人运动测试
+
+3. 给机器人发出类似“前”、“后”、“左”、“右”、“停止”的语音指令，观察机器人的运动情况
 
 ##### Gmapping 测试方法
 
