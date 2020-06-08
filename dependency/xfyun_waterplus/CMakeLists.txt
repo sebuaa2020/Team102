@@ -117,6 +117,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
   ${catkin_INCLUDE_DIRS}
   include
 )
@@ -267,4 +268,32 @@ add_dependencies(iat_file ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_
 target_link_libraries(iat_file
   ${catkin_LIBRARIES}
    ${LIBS} 
+)
+
+add_executable(my_asr
+  src/my_asr.cpp
+  src/xfyun/speech_recognizer.c 
+  src/xfyun/linuxrec.c
+)
+add_dependencies(my_asr ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(my_asr
+  ${catkin_LIBRARIES}
+    ${LIBS} 
+)
+
+add_executable(my_voice_cmd
+  src/my_voice_cmd.cpp
+)
+add_dependencies(my_voice_cmd ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(my_voice_cmd
+  ${catkin_LIBRARIES}
+)
+
+add_executable(my_tts
+  src/my_tts.cpp
+)
+add_dependencies(my_tts ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(my_tts
+  ${catkin_LIBRARIES}
+    ${LIBS}
 )

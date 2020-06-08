@@ -10,13 +10,13 @@
 
 using namespace std;
 
-#define STATE_WAITING	0
-#define STATE_NAV_TO	1
-#define STATE_DETECT	2
-#define STATE_GRAB		3
-#define STATE_NAV_BACK	4
-#define STATE_STOP		5
-#define STATE_ERROR		6
+#define STATE_WAITING	0//等待
+#define STATE_NAV_TO	1//导航去
+#define STATE_DETECT	2//检测
+#define STATE_GRAB		3//抓取
+#define STATE_NAV_BACK	4//导航回
+#define STATE_STOP		5//停止
+#define STATE_ERROR		6//出错
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 static string strGoto;
@@ -33,6 +33,37 @@ static bool bGrabDone;
 static int nState = STATE_WAITING;
 static int nDelay = 0;
 
+static vector<string> arKeyword;
+
+// 将机器人当前位置保存为新航点
+void AddNewWaypoint(string inStr)
+{
+	tf::TransformListener listener;
+	tf::StampedTransform transform;
+	try
+	{
+		listener.waitForTransform("/map","/base_footprint",  ros::Time(0), ros::Duration(10.0) );
+		listener.lookupTransform("/map","/base_footprint", ros::Time(0), transform);
+	}
+	catch (tf::TransformException &ex) 
+	{
+		ROS_ERROR("[lookupTransform] %s",ex.what());
+		return;
+	}
+
+	float tx = transform.getOrigin().x();
+	float ty = transform.getOrigin().y();
+	tf::Stamped<tf::Pose> p = tf::Stamped<tf::Pose>(tf::Pose(transform.getRotation() , tf::Point(tx, ty, 0.0)), ros::Time::now(), "map");
+	geometry_msgs::PoseStamped new_pos;
+	tf::poseStampedTFToMsg(p, new_pos);
+
+	waterplus_map_tools::Waypoint new_waypoint;
+	new_waypoint.name = inStr;
+	new_waypoint.pose = new_pos.pose;
+	add_waypoint_pub.publish(new_waypoint);
+
+	ROS_WARN("[New Waypoint] %s ( %.2f , %.2f )" , new_waypoint.name.c_str(), tx, ty);
+}
 
 // 物品抓取模式开关
 static void GrabSwitch(bool inActive)
@@ -57,12 +88,38 @@ void GrabResultCallback(const std_msgs::String::ConstPtr& res)
 	}
 }
 
+// 物品递给状态
+void PassResultCallback(const std_msgs::String::ConstPtr& res)
+{
+	int nFindIndex = 0;
+	nFindIndex = res->data.find("done");
+	if( nFindIndex >= 0 )
+	{
+	}
+}
+
+void KeywordCB(const std_msgs::String::ConstPtr & msg)
+{
+    int nFindIndex = 0;
+    if(nState == STATE_WAITING){
+    	nFindIndex = msg->data.find("water");
+	    if( nFindIndex >= 0 )
+	    {
+	        ROS_WARN("[KeywordCB] - Water");
+	        ROS_WARN("STATE_WAITING ==> STATE_NAV_TO");
+	        nState = STATE_NAV_TO;
+	    }
+    }
+}
+
+
 
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "rushbot_main");
 
 	ros::NodeHandle n;
+	ros::Subscriber sub_sr = n.subscribe("voiceWords", 10, KeywordCB);
 	cliGetWPName = n.serviceClient<waterplus_map_tools::GetWaypointByName>("/waterplus/get_waypoint_name");
 	add_waypoint_pub = n.advertise<waterplus_map_tools::Waypoint>( "/waterplus/add_waypoint", 1);
 	vel_pub = n.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
@@ -70,17 +127,20 @@ int main(int argc, char** argv)
 	behaviors_pub = n.advertise<std_msgs::String>("/rushbot/behaviors", 30);
 
 	ROS_WARN("[main] rushbot_main");
+	ROS_WARN("STATE_WAITING");
 	ros::Rate r(30);
 	while(ros::ok())
 	{
 		// waiting for command
 		if(nState == STATE_WAITING)
 		{
+			
 			nDelay++;
-			if (nDelay > 100) {
+			if (nDelay > 10000) {
 				nState = STATE_NAV_TO;
-				ROS_INFO("main change state : STATE_NAV_TO");
+				ROS_WARN("STATE_WAITING ==> STATE_NAV_TO");
 			}
+			
 		}
 		// navigate to desk
 		if(nState == STATE_NAV_TO)
@@ -92,7 +152,7 @@ int main(int argc, char** argv)
 				std::string name = srvName.response.name;
 				float x = srvName.response.pose.position.x;
 				float y = srvName.response.pose.position.y;
-				ROS_INFO("[STATE_NAV_TO] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
+				ROS_INFO("[STATE_GOTO] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
 
 				MoveBaseClient ac("move_base", true);
 				if(!ac.waitForServer(ros::Duration(5.0)))
@@ -111,13 +171,14 @@ int main(int argc, char** argv)
 					{
 						ROS_INFO("Arrived at %s!",strGoto.c_str());
 						nState = STATE_DETECT;
-						ROS_INFO("main change state : STATE_DETECT");
+						ROS_WARN("STATE_NAV_TO ==> STATE_DETECT");
 						nDelay = 0;
 					}
 					else
 					{
 						ROS_INFO("Failed to get to %s ...",strGoto.c_str() );
 						nState = STATE_ERROR;
+						ROS_WARN("STATE_NAV_TO ==> STATE_ERROR");
 					}
 				}
 
@@ -140,7 +201,7 @@ int main(int argc, char** argv)
 			if(bGrabDone == true)
 			{
 				nState = STATE_NAV_BACK;
-				ROS_INFO("main change state : STATE_NAV_BACK");
+				ROS_WARN("STATE_DETECT ==> STATE_NAV_BACK");
 			}
 		}
 
@@ -154,7 +215,7 @@ int main(int argc, char** argv)
 				std::string name = srvName.response.name;
 				float x = srvName.response.pose.position.x;
 				float y = srvName.response.pose.position.y;
-				ROS_INFO("[STATE_NAV_BACK] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
+				ROS_INFO("[STATE_COMEBACK] Get_wp_name = %s (%.2f,%.2f)", strGoto.c_str(),x,y);
 
 				MoveBaseClient ac("move_base", true);
 				if(!ac.waitForServer(ros::Duration(5.0)))
@@ -174,6 +235,7 @@ int main(int argc, char** argv)
 						ROS_INFO("Arrived at %s!",strGoto.c_str());
 						ROS_INFO("main change state : STATE_WAITING");
 						nState = STATE_WAITING;
+						ROS_WARN("STATE_NAV_BACK ==> STATE_WAITING");
 						nDelay = 0;
 					}
 					else

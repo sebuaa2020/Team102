@@ -230,12 +230,14 @@ void rec_file_callback(const std_msgs::String::ConstPtr& msg)
 
 int main(int argc, char* argv[])
 {
-
 	ros::init(argc, argv, "xfyun_asr_node");
-
     ros::NodeHandle n;
     asr_pub = n.advertise<std_msgs::String>("/xfyun/asr", 20);
 	ros::Subscriber sub =n.subscribe("/xfyun/reco_file",2,rec_file_callback);
+
+	char const* home_dir = getenv("HOME");
+	std::string strHomeDir = home_dir;
+	std::string strFile = strHomeDir + "/catkin_ws/src/wpb_home_apps_2017/asr/1_follow.bnf";
 
     int			ret						=	MSP_SUCCESS;
 	const char* login_params			=	"appid = 58eeeedf, work_dir = .";
@@ -256,7 +258,7 @@ int main(int argc, char* argv[])
 	memset(grammar_id, 0, GRAMID_LEN);
 
 	printf("上传语法 ...\n");
-	ret = get_grammar_id("/home/robot/catkin_ws/src/wpb_home_apps/asr/1_follow.bnf", grammar_id, GRAMID_LEN);
+	ret = get_grammar_id(strFile, grammar_id, GRAMID_LEN);
 	if (MSP_SUCCESS != ret)
 		goto exit;
 	printf("上传语法成功\n");

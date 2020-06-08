@@ -18,6 +18,12 @@
   <!-- Run the map server -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(find rushbot)/data/map.yaml"/>
 
+
+    <node pkg="xfyun_waterplus" type="my_asr" name="my_asr" output="screen"/> 
+    
+    <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py"/>
+  
+  
   <!-- Map tools  -->
   <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager">
     <param name="load" type="string" value="$(find rushbot)/data/waypoints.xml"/> 

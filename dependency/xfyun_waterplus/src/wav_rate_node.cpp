@@ -44,9 +44,13 @@ static ros::Publisher reco_pub;
 void sndFileCallback(const std_msgs::String::ConstPtr& msg)
 {
 	ROS_INFO("ffmpeg: [%s]", msg->data.c_str());
+	
+	char const* home_dir = getenv("HOME");
+	std::string strHomeDir = home_dir;
+	std::string strFF = strHomeDir + "/catkin_ws/src/xfyun_kinetic/tools/ffmpeg -i ";
+
 	std::stringstream ss;
-	//ss << "/home/robot/speech_" << count << ".wav";
-	ss << "/home/robot/catkin_ws/src/xfyun_waterplus/tools/ffmpeg -i " << msg->data << " -v 0 -map_channel 0.0.0 -ar 16k -y /dev/shm/tmp.wav"; //16khz,单声道
+	ss << strFF << msg->data << " -v 0 -map_channel 0.0.0 -ar 16k -y /dev/shm/tmp.wav"; //16khz,单声道
 	system(ss.str().c_str());
 
 	std_msgs::String reco_msg;

@@ -173,6 +173,10 @@ int main(int argc, char *argv[])
 {
 	ros::init(argc, argv, "waterplus_recorder_wav");
 
+	char const* home_dir = getenv("HOME");
+	std::string strHomeDir = home_dir;
+	std::string strTonePlay = strHomeDir + "/catkin_ws/src/xfyun_kinetic/sound/on.wav";
+
 	int ret;
 	short buf[BUFSIZE * 2];
 
@@ -269,7 +273,7 @@ int main(int argc, char *argv[])
 			sound_play::SoundRequest sp;
 			sp.sound = sound_play::SoundRequest::PLAY_FILE;
 			sp.command = sound_play::SoundRequest::PLAY_ONCE;
-			sp.arg = "/home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav";
+			sp.arg = strTonePlay;
 			play_pub.publish(sp);
 			usleep(1000*1000);
 

@@ -42,7 +42,7 @@
 #define CMD_LEFT        3
 #define CMD_RIGHT       4   
 
-#define CMD_DURATION    30
+#define CMD_DURATION    300
 
 static ros::Publisher vel_pub;
 static ros::Publisher spk_pub;

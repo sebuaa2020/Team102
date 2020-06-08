@@ -10,9 +10,10 @@
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include "speech_recognizer.h"
-#include "xfyun_waterplus/IATSwitch.h"
+#include "xfyun_waterplus/IATSwitch.h" 
 
 static bool bCue = true;	//true-语音识别前有提示音; false-语音识别前没有提示音
+static std::string strTonePlay;
 
 #define FRAME_LEN	640 
 #define	BUFFER_SIZE	4096
@@ -63,7 +64,7 @@ void on_speech_begin()
 	if(bCue == true)
 	{
 		std::stringstream ss;
-		ss << "aplay -q /home/robot/catkin_ws/src/xfyun_waterplus/sound/on.wav"; //16khz,单声道
+		ss << strTonePlay; //16khz,单声道
 		system(ss.str().c_str());
 	}
 }
@@ -138,6 +139,11 @@ int main(int argc, char* argv[])
     n_param.param<bool>("cue", bCue, true);
     n_param.param<bool>("cn", bCN, false); 
     n_param.param<bool>("start", bActive, true);
+
+	//char const* home_dir = getenv("HOME");
+	//std::string strHomeDir = home_dir;
+	//strTonePlay = "aplay -q " + strHomeDir + "/home/demo2_ws/src/xfyun_kinetic/sound/on.wav";
+	strTonePlay = "aplay -q /home/demo2_ws/src/xfyun_kinetic/sound/on.wav";
 
 	int ret = MSP_SUCCESS;
 	const char* login_params = "appid = 58eeeedf, work_dir = .";
