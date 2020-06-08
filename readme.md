@@ -25,11 +25,23 @@
 
 2. 拉取仓库
 
+<<<<<<< HEAD
    为了开发方便，直接将整个src上传了，开发结束后再进行整理。 备份原有 `catkin_ws` 下 `src` 目录（如有必要） 进入该目录后，清空该目录下所有内容
 
    ```
    git clone https://github.com/sebuaa2020/Team102.git
    ```
+=======
+   为了开发方便，直接将整个src上传了，开发结束后再进行整理。
+   备份原有 `catkin_ws` 下 `src` 目录（如有必要）
+   进入该目录后，清空该目录下所有内容
+
+   ``` sh
+   git clone https://github.com/sebuaa2020/Team102.git
+   ```
+
+   不知道什么原因，iai-kinect2 包传不上来，可能需要[安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
+>>>>>>> origin/master
 
    不知道什么原因，iai-kinect2 包传不上来，可能需要[安装 iai-kinect2](https://zhuanlan.zhihu.com/p/134058262)
 
@@ -45,6 +57,7 @@
 
 ### 测试说明
 
+<<<<<<< HEAD
 ```
 测试代码位于 `test/code`, `rushbot/launch/test` 和 `rushbot/src` 目录下。
 ```
@@ -52,10 +65,32 @@
 ##### 可靠性测试与模块测试
 
 ```
+=======
+	测试代码位于 `test/code`, `rushbot/launch/test` 和 `rushbot/src` 目录下。
+
+##### 可靠性测试与模块测试
+
+```sh
+>>>>>>> origin/master
 python test/code/test_modules.py
 ```
 
 ##### 语音控制测试方法
+<<<<<<< HEAD
+=======
+
+1. `roslaunch wpr_simulation wpb_simple.launch`
+
+   Gazebo运行环境
+
+2. `roslaunch xfyun_waterplus my_voice_cmd_test.launch`
+
+   开始语音控制机器人运动测试
+
+3. 给机器人发出类似“前”、“后”、“左”、“右”、“停止”的语音指令，观察机器人的运动情况
+
+##### Gmapping 测试方法
+>>>>>>> origin/master
 
 1. `roslaunch wpr_simulation wpb_simple.launch`
 
@@ -133,5 +168,13 @@ python test/code/test_modules.py
 
 ### 运行说明
 
+<<<<<<< HEAD
 1. `roslaunch wpr_simulation wpb_simple.launch` Gazebo 运行环境
 2. `roslaunch rushbot rushbot_main.launch` 开启 Rviz 并进行相关配置 开启功能节点
+=======
+1. `roslaunch wpr_simulation wpb_simple.launch`
+   Gazebo 运行环境
+2. `roslaunch rushbot rushbot_main.launch`
+   开启 Rviz 并进行相关配置
+   开启功能节点
+>>>>>>> origin/master
